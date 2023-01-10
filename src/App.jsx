@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AddTaskForm from './components/AddTaskForm';
+import EditTaskForm from './components/EditTaskForm'
+import TaskList from './components/TaskList'
 
 
 
 function App() {
-
-
 
   const [tasks, setTasks] = useState([
     { "id": 1, "title": "Task1", "isCompleted": false },
@@ -17,115 +15,64 @@ function App() {
 
   // Temp state
   const [updateData, setUpdateData] = useState('')
+  const [newTask, setNewTask] = useState('')
 
-
-  //Add new task
-  function addTaskHandler() {
-    const taskTitle = document.getElementById('task__title__id').value
-    console.log(taskTitle);
-    if (taskTitle) {
-      let num = tasks.length + 1
-      setTasks([...tasks, { id: num, title: taskTitle, isCompleted: false }])
-    }
+  //Add new task 
+  const addTask = () => {
+    setTasks([...tasks, {
+      "id": tasks.length + 1,
+      "title": newTask,
+      "isCompleted": false
+    }])
+    setNewTask('')
   }
 
-  // //Delete specific task
-  function deleteTaskHandler(id) {
-    let afterDeleteTasks = tasks.filter(task => task.id !== id)
-    setTasks(afterDeleteTasks)
-  }
-
-  // // Change Task title
-  const changeTask = (text) => {
-    let revisedTask = {
+  //Change task for update
+  const changeTask = (e) => {
+    let newTask = {
       id: updateData.id,
-      title: text,
-      isCompleted: updateData.isCompleted
+      title: e.target.value,
+      isCompleted: updateData.isCompleted ? true : false
     }
-    setUpdateData(revisedTask)
+    setUpdateData(newTask)
   }
 
-  //Update Task
+  //Update changed task
   const updateTask = () => {
-    let otherTasks = [...tasks].filter(task => task.id !== updateData.id)
-    let revisedTasks = [...otherTasks, updateData]
-    setTasks(revisedTasks)
+    let notChangeTasks = [...tasks].filter(task => task.id !== updateData.id)
+    let updateTasks = [...notChangeTasks, updateData]
+    setTasks(updateTasks)
     setUpdateData('')
   }
 
-  // //Mark Task completed
-  const markTaskDone = (id) => {
-    let tasksMarkedDone = tasks.map(task => {
-      if (task.id === id) {
-        return ({ ...task, isCompleted: !task.isCompleted })
-      }
-      return task
-    })
-    setTasks(tasksMarkedDone)
-
-  }
-
-  // Cancel update
+  //Cancel Update
   const cancelUpdate = () => {
     setUpdateData('')
   }
 
+  //Delete Task
+  const deleteTask = (id) => {
+    let newTasks = tasks.filter(task => task.id !== id)
+    setTasks(newTasks)
+  }
+
+  const markTaskDone = (id) => {
+    let newTasks = tasks.map(task => {
+      if (task.id === id) { return ({ ...task, isCompleted: !task.isCompleted }) }
+      return task
+    })
+    setTasks(newTasks)
+  }
+
   return (
-    <div className="App">
-      <div className='todo__wrapper'>
-        <span><h1>Todo List</h1></span>
-        {updateData && updateData ? (
-          <EditTaskForm changeTask={changeTask} updateTask={updateTask} cancelUpdate={cancelUpdate}></EditTaskForm>
-        ) : (
-          <>
-            <div className='add-task'>
-              <input type="textarea" className='task__title' id='task__title__id' />
-              <button type="submit" className='task__submit'
-                onClick={addTaskHandler} accessKey='\n'> + </button>
-            </div>
-          </>
-        )}
-
-
-
-        <div className="tasks__list" id='tasks__list__id'>
-          ``
-          {/* update Data */}
-          {tasks && tasks.length ? '' : 'No Tasks'}
-
-          {/* To do Tasks */}
-          {tasks && tasks
-            .sort((a, b) => a.id > b.id ? -1 : 1)
-            .map((task, index) => {
-              return (<>
-                <li key={task.id} className='task__item'>
-                  <span> {index + 1}.</span>
-                  <span>{task.title}</span>
-                  {
-                    task.isCompleted ? null :
-                      <EditIcon className='edit__Button' type='button' value='Edit'
-                        onClick={() => {
-                          setUpdateData({
-                            id: task.id,
-                            title: task.title,
-                            isCompleted: task.isCompleted
-                          })
-                        }} />
-                  }
-                  <CheckCircleIcon type='button' className='finish__button' value='Finish' onClick={() => markTaskDone(task.id)} />
-
-                  <DeleteIcon className='delete__Button' type='button' value='Delete' onClick={() => deleteTaskHandler(task.id)} color='error' />
-
-
-                </li>
-              </>
-              )
-            }
-            )}
-        </div>
-
-      </div>
-    </div>
+    <>
+      <span><h1>Todo List</h1></span>
+      {updateData && updateData ?
+        (<EditTaskForm changeTask={changeTask} updateTask={updateTask} cancelUpdate={cancelUpdate} />) :
+        (<AddTaskForm addTask={addTask} newTask={newTask} setNewTask={setNewTask} />)
+      }
+      <TaskList tasks={tasks} setUpdateData={setUpdateData} deleteTask={deleteTask} markTaskDone={markTaskDone} />
+    </>
   )
 }
 export default App
