@@ -1,16 +1,37 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import './App.css'
 import AddTaskForm from './components/AddTaskForm';
 import EditTaskForm from './components/EditTaskForm'
 import TaskList from './components/TaskList'
 
 
+// context (global state)
+
+
+
+
 
 function App() {
+  // theme
+  // const [mode, setMode] = useState("dark")
+  // const theme = useMemo(
+  //   () =>
+  //     createTheme({
+  //       palette: {
+  //         type: mode,
+  //         background: {
+  //           dark: "hsl(230, 17%, 14%)",
+  //           light: "hsl(0, 0%, 100%)"
+  //         }
+  //       }
+  //     }),
+  //   [mode]
+  // );
+
+
 
   const [tasks, setTasks] = useState([
-    { "id": 1, "title": "Task1", "isCompleted": false },
-    { "id": 2, "title": "Task2", "isCompleted": false }
+
   ])
 
   // Temp state
@@ -71,8 +92,9 @@ function App() {
         (<EditTaskForm changeTask={changeTask} updateTask={updateTask} cancelUpdate={cancelUpdate} />) :
         (<AddTaskForm addTask={addTask} newTask={newTask} setNewTask={setNewTask} />)
       }
-      <TaskList tasks={tasks} setUpdateData={setUpdateData} deleteTask={deleteTask} markTaskDone={markTaskDone} />
+      <TaskList setUpdateData={setUpdateData} deleteTask={deleteTask} markTaskDone={markTaskDone} />
     </>
+
   )
 }
 export default App

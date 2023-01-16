@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux";
+import { selectTodo } from "../store/slice/todoSlice";
 
-const TaskList = ({ tasks, markTaskDone, setUpdateData, deleteTask }) => {
+const TaskList = ({ markTaskDone, setUpdateData, deleteTask }) => {
+    const states = useSelector(selectTodo)
+    const tasks = states.tasks
 
     return (
         <div className="tasks__list" id='tasks__list__id'>
@@ -8,7 +12,7 @@ const TaskList = ({ tasks, markTaskDone, setUpdateData, deleteTask }) => {
             {tasks && tasks.length ? '' : 'No Tasks'}
 
             {/* To do Tasks */}
-            {tasks && tasks
+            {tasks && tasks.slice()
                 .sort((a, b) => a.id > b.id ? -1 : 1)
                 .map((task, index) => {
                     return (<>
