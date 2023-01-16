@@ -1,13 +1,12 @@
 import React from 'react'
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { addTask, setNewTask, selectNewTask } from '../store/slice/todoSlice'
+import { addTask, setNewTask } from '../store/slice/todoSlice'
 
 
 export default function AddTaskForm() {
     const dispatch = useDispatch()
 
-    const newTask = useSelector(state=>state.todo.value)
+    const newTask = useSelector(state=>state.todo.newTask)
 
     return (
         <>

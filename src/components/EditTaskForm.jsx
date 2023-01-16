@@ -1,5 +1,8 @@
+import { useDispatch } from "react-redux";
 
 function EditTaskForm({ changeTask, updateTask, cancelUpdate }) {
+
+    const dispatch = useDispatch()
     return <>
         <form>
             <input type='text' onChange={e => { changeTask(e); }} />
