@@ -10,39 +10,46 @@ export const todoSlice = createSlice({
     updateData: ""
   },
   reducers: {
-
     // Add new task 
     addTask: (state, action) => {
       const newTask = ({
         "id": state.tasks.legth,
         "title": state.newTask,
-        "isCompleted": false
+        "isCompleted": false,
       });
       state.tasks.push(newTask)
-      state.newTask = ""
+      state.newTask = ''
+    },
+    setTasks: (state, action) => {
+      state.tasks = action.payload
     },
 
     // set temp new task
     setNewTask: (state, action) => {
-      const newTaskTitle = action.payload
-      state.newTask = newTaskTitle
+      state.newTask = action.payload
     },
     setUpdateData: (state, action) => {
-
-      const newUpdateData = action.payload
-      console.log(newUpdateData)
-      state.updateData = newUpdateData
+      state.updateData = action.payload
     },
 
 
     // Change task for update
-    changeTask: (state, action, e) => {
+    changeTask: (state, action) => {
       let newTask = {
-        id: updateData.id,
-        title: e.target.value,
-        isCompleted: updateData.isCompleted ? true : false
+        id: state.updateData.id,
+        title: action.payload,
+        isCompleted: state.updateData.isCompleted ? true : false
       }
-      setUpdateData(newTask)
+      state.updateData = newTask
+    },
+
+    //Update changed task
+    updateTask: (state, action) => {
+
+      const notChangeTasks = state.tasks.filter(task => task.id !== state.updateData.id)
+      const updateTasks = [...notChangeTasks, state.updateData]
+      state.tasks = updateTasks
+      state.updateData = ''
     },
 
     //Cancel Update
@@ -73,5 +80,5 @@ export const todoSlice = createSlice({
 
 export const selectTodo = (state) => state.todo;
 
-export const { addTask, setNewTask, deleteTask, markTaskDone, setUpdateData } = todoSlice.actions;
+export const { addTask, setNewTask, deleteTask, markTaskDone, setUpdateData, updateTask, cancelUpdate, changeTask } = todoSlice.actions;
 export default todoSlice.reducer;
