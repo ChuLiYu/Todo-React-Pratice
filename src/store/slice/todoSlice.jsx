@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuid } from 'uuid';
+
 export const todoSlice = createSlice({
   name: "todo",
   initialState: {
     tasks: [
-      { "id": 1, "title": "Task1", "isCompleted": false },
-      { "id": 2, "title": "Task2", "isCompleted": false }
+      { "id": uuid(), "title": "Task1", "isCompleted": false },
+      { "id": uuid(), "title": "Task2", "isCompleted": false }
     ],
     newTask: "",
     updateData: ""
@@ -13,7 +15,7 @@ export const todoSlice = createSlice({
     // Add new task 
     addTask: (state, action) => {
       const newTask = ({
-        "id": state.tasks.legth,
+        "id": uuid(),
         "title": state.newTask,
         "isCompleted": false,
       });
