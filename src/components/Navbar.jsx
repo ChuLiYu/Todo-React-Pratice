@@ -5,6 +5,7 @@ const Navbar = () => {
     <ul>
       <Link to='/'>Home</Link>
       <Link to='/done'>Done</Link>
+      <Link to='/DragTester'>Drag</Link>
     </ul>
   )
 }

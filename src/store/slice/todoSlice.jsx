@@ -80,5 +80,5 @@ export const todoSlice = createSlice({
 
 export const selectTodo = (state) => state.todo;
 
-export const { addTask, setNewTask, deleteTask, markTaskDone, setUpdateData, updateTask, cancelUpdate, changeTask } = todoSlice.actions;
+export const { addTask, setNewTask, deleteTask, markTaskDone, setUpdateData, updateTask, cancelUpdate, changeTask, setTasks } = todoSlice.actions;
 export default todoSlice.reducer;

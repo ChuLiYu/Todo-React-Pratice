@@ -1,9 +1,39 @@
+import { useRef } from "react";
 import { useDispatch } from "react-redux"
-import { deleteTask, markTaskDone, setUpdateData } from "../store/slice/todoSlice";
+import { deleteTask, markTaskDone, setUpdateData, setTasks } from "../store/slice/todoSlice";
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const TasksList = ({ tasks, title }) => {
 
   const dispatch = useDispatch()
+
+  // Drag function
+  const dragItem = useRef();
+  const dragOverItem = useRef();
+
+
+  const dragStart = (e, position) => {
+    dragItem.current = position;
+  };
+
+  const dragEnter = (e, position) => {
+    dragOverItem.current = position;
+  };
+
+  const drop = (e) => {
+    const copyListItems = [...tasks];
+    const dragItemContent = copyListItems[dragItem.current];
+    copyListItems.splice(dragItem.current, 1);
+    copyListItems.splice(dragOverItem.current, 0, dragItemContent);
+    dragItem.current = null;
+    dragOverItem.current = null;
+    dispatch(setTasks(copyListItems));
+  };
+
+
 
   return (
     <div className="tasks__list" id='tasks__list__id'>
@@ -14,15 +44,25 @@ const TasksList = ({ tasks, title }) => {
 
       {/* To do Tasks */}
       {tasks && tasks.slice()
-        .sort((a, b) => a.id > b.id ? -1 : 1)
+        // .sort((a, b) => a.id > b.id ? -1 : 1)
         .map((task, index) => {
           return (<>
-            <li key={task.id} className='task__item'>
-              <span> {index + 1}.</span>
+            <li key={task.id} className='task__item'
+              onDragStart={(e) => dragStart(e, index)}
+              onDragEnter={(e) => dragEnter(e, index)}
+              onDragEnd={drop}
+              draggable>
+
+
+              {task.isCompleted ?
+                <input type='checkbox' checked className='finish__button' value='Finish' onClick={() => dispatch(markTaskDone(task.id))} /> :
+                <input type='checkbox' className='finish__button' value='Finish' onClick={() => dispatch(markTaskDone(task.id))} />}
+
               <span>{task.title}</span>
+
               {
                 task.isCompleted ? null :
-                  <input className='edit__Button' type='button' value='Edit'
+                  <EditIcon className='edit__Button' type='button' value='Edit'
                     onClick={() => dispatch(setUpdateData({
                       "id": task.id,
                       "title": task.title,
@@ -31,10 +71,10 @@ const TasksList = ({ tasks, title }) => {
                     }))
                     } />
               }
-              <input type='button' className='finish__button' value='Finish' onClick={() => dispatch(markTaskDone(task.id))} />
-
-              <input className='delete__Button' type='button' value='Delete' onClick={() => dispatch(deleteTask(task.id))} color='error' />
+              <DeleteForeverIcon className='delete__Button' type='button' onClick={() => dispatch(deleteTask(task.id))} color='error' />
               <p>{task.description}</p>
+
+              <DragIndicatorIcon />
             </li>
           </>
           )
