@@ -9,7 +9,30 @@ export const todoSlice = createSlice({
       { "id": uuid(), "title": "Task2", "isCompleted": false }
     ],
     newTask: "",
-    updateData: ""
+    updateData: "",
+    textFieldStyles: {
+      label: {
+        color: 'white'
+      },
+      underline: {
+        borderBottomColor: 'white'
+      },
+      outlinedInputRoot: {
+        fieldset: {
+          borderColor: 'white'
+        },
+        hoverFieldset: {
+          borderColor: 'white'
+        },
+        focusedFieldset: {
+          borderColor: 'white'
+        }
+      },
+      input: {
+        color: 'white'
+      }
+    }
+
   },
   reducers: {
     // Add new task 
