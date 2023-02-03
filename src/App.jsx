@@ -28,7 +28,6 @@ function App() {
         <Routes>
           <Route path='/' element={<Todo />} />
           <Route path='/done' element={<CompletedTodo />} />
-          <Route path='/DragTester' element={<DragTester />} />
         </Routes>
       </Router>
     </>
